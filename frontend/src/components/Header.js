@@ -1,5 +1,5 @@
 import React from 'react'
-import { Badge, Nav, Navbar, Container } from 'react-bootstrap'
+import { Badge, Nav, Navbar, Container, NavDropdown } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import { useSelector } from 'react-redux'
 
@@ -9,6 +9,11 @@ import { useSelector } from 'react-redux'
 
 const Header = (props) => {
   const { cartItems } = useSelector((state) => state.cart)
+  const { userInfo } = useSelector((state) => state.auth)
+
+  const logoutHandler = () => {
+    console.log('logout')
+  }
 
   return (
     <header>
@@ -30,11 +35,22 @@ const Header = (props) => {
                   )}
                 </Nav.Link>
               </LinkContainer>
-              <LinkContainer to='/login'>
-                <Nav.Link>
-                  <i className='fas fa-user'></i>Sign In
-                </Nav.Link>
-              </LinkContainer>
+              {userInfo ? (
+                <NavDropdown title={userInfo.name} id='username'>
+                  <LinkContainer to='/profile'>
+                    <NavDropdown.Item>Profile</NavDropdown.Item>
+                  </LinkContainer>
+                  <NavDropdown.Item onClick={logoutHandler}>
+                    logout
+                  </NavDropdown.Item>
+                </NavDropdown>
+              ) : (
+                <LinkContainer to='/login'>
+                  <Nav.Link>
+                    <i className='fas fa-user'></i>Sign In
+                  </Nav.Link>
+                </LinkContainer>
+              )}
             </Nav>
           </Navbar.Collapse>
         </Container>
