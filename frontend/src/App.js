@@ -14,10 +14,12 @@ import LoginScreen from './screens/LoginScreen'
 import RegisterScreen from './screens/RegisterScreen'
 import ShippingScreen from './screens/ShippingScreen'
 import PrivateRoute from './components/PrivateRoute'
+import AdminRoute from './components/AdminRoute'
 import PaymentScreen from './screens/PaymentScreen'
 import PlaceOrderScreen from './screens/PlaceOrderScreen'
 import OrderScreen from './screens/OrderScreen'
 import Profilescreen from './screens/Profilescreen'
+import OrderListScreen from './screens/admin/OrderListScreen'
 
 const App = () => {
   return (
@@ -32,6 +34,7 @@ const App = () => {
             <Route path='/login' element={<LoginScreen />} />
             <Route path='/register' element={<RegisterScreen />} />
 
+            {/* User private routes starts */}
             <Route path='' element={<PrivateRoute />}>
               <Route path='/shipping' element={<ShippingScreen />} />
               <Route path='/payment' element={<PaymentScreen />} />
@@ -39,6 +42,13 @@ const App = () => {
               <Route path='/order/:id' element={<OrderScreen />} />
               <Route path='/profile' element={<Profilescreen />} />
             </Route>
+            {/* User private routes ends */}
+
+            {/* Admin Routes starts */}
+            <Route path='' element={<AdminRoute />}>
+              <Route path='/admin/orderlist' element={<OrderListScreen />} />
+            </Route>
+            {/* Admin Routes ends */}
           </Routes>
         </Container>
       </main>
