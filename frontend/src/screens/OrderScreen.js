@@ -9,6 +9,7 @@ import {
   useGetOrderDetailsQuery,
   usePayOrderMutation,
   useGetPayPalClientIdQuery,
+  useDeliverOrderMutation,
 } from '../slices/orderApiSlice'
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js'
 
@@ -23,6 +24,9 @@ const OrderScreen = () => {
   } = useGetOrderDetailsQuery(orderId)
 
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation()
+
+  const [deliverOrder, { isLoading: loadingDeliver }] =
+    useDeliverOrderMutation()
 
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer()
 
@@ -80,6 +84,12 @@ const OrderScreen = () => {
       .then((orderId) => {
         return orderId
       })
+  }
+
+  async function deliverHandler(e) {
+    e.preventDefault()
+    await deliverOrder(orderId)
+    refetch()
   }
 
   return isLoading ? (
@@ -216,7 +226,23 @@ const OrderScreen = () => {
                   )}
                 </ListGroup.Item>
               )}
-              {/* {MARK AS DELIVERED PLACEHOLDER} */}
+
+              {loadingDeliver && <Loader />}
+
+              {userInfo &&
+                userInfo.isAdmin &&
+                order.isPaid &&
+                !order.isDelivered && (
+                  <ListGroup.Item>
+                    <Button
+                      type='button'
+                      className='btn btn-block'
+                      onClick={deliverHandler}
+                    >
+                      Mark As Delivered
+                    </Button>
+                  </ListGroup.Item>
+                )}
             </ListGroup>
           </Card>
         </Col>
