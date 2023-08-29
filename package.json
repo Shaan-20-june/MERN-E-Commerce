@@ -4,6 +4,7 @@
   "description": "E-Commerce MERN Application",
   "main": "server.js",
   "type": "module",
+  "proxy": "http://127.0.0.1:5000",
   "scripts": {
     "start": "node backend/server.js",
     "server": "nodemon backend/server.js",
