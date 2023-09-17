@@ -14,6 +14,7 @@ import { addToCart } from '../slices/cartSlice'
 import Rating from '../components/Rating'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
+import Meta from '../components/Meta'
 
 const ProductScreen = (props) => {
   const dispatch = useDispatch()
@@ -68,6 +69,7 @@ const ProductScreen = (props) => {
         </Message>
       ) : (
         <>
+          <Meta title={product.name} description={product.description} />
           <Link className='btn btn-light my-3' to='/'>
             Go Back
           </Link>

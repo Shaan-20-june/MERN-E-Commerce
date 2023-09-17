@@ -10,9 +10,13 @@ const getProducts = asyncHandler(async (req, res) => {
 
   const currentPage = Number(req.query.pageNumber) || 1
 
-  const totalProductCount = await Product.countDocuments()
+  const keyword = req.query.keyword
+    ? { name: { $regex: req.query.keyword, $options: 'i' } }
+    : {}
 
-  const products = await Product.find({})
+  const totalProductCount = await Product.countDocuments({ ...keyword })
+
+  const products = await Product.find({ ...keyword })
     .limit(pageSize)
     .skip(pageSize * (currentPage - 1))
 
@@ -140,6 +144,15 @@ const createProductReview = asyncHandler(async (req, res) => {
   }
 })
 
+// @desc    Get Top Rated Products
+// @route   GET api/products/top
+// @access  Public
+const getTopProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find({}).sort({ rating: -1 }).limit(3)
+
+  res.json(products)
+})
+
 export {
   getProductById,
   getProducts,
@@ -147,4 +160,5 @@ export {
   updateProduct,
   deleteProduct,
   createProductReview,
+  getTopProducts,
 }
