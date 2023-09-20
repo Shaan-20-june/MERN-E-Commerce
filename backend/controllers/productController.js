@@ -6,7 +6,7 @@ import Product from '../models/productModel.js'
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
   // pageSize = Number of products in one page
-  const pageSize = 4
+  const pageSize = process.env.PAGINATION_LIMIT
 
   const currentPage = Number(req.query.pageNumber) || 1
 

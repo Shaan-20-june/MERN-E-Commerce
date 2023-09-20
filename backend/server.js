@@ -24,10 +24,6 @@ app.use(express.urlencoded({ extended: true }))
 // Cookie parser middleware
 app.use(cookieParser())
 
-app.get('/', (req, res) => {
-  res.send('API is working!')
-})
-
 // Use the routes
 app.use('/api/products', productRoutes)
 app.use('/api/users', userRoutes)
@@ -42,6 +38,20 @@ app.get('/api/config/paypal', (req, res) => {
 // Set up static folder for image upload
 const __dirname = path.resolve()
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
+
+if (process.env.NODE_ENV === 'production') {
+  // set static folder
+  app.use(express.static(path.join(__dirname, '/frontend/build')))
+
+  // any route that is not handled by our api will be directed to index.html
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
+  })
+} else {
+  app.get('/', (req, res) => {
+    res.send('API is working!')
+  })
+}
 
 // Error handler middlewares
 app.use(notFound)
